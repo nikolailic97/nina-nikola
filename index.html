@@ -51,8 +51,7 @@
         body {
           cursor: none;
         }
-        .cursor,
-        .cursor-ring {
+        .cursor {
           display: block !important;
         }
       }
@@ -66,20 +65,6 @@
         pointer-events: none;
         z-index: 9999;
         transform: translate(-50%, -50%);
-      }
-      .cursor-ring {
-        display: none;
-        position: fixed;
-        width: 32px;
-        height: 32px;
-        border: 1px solid rgba(201, 169, 110, 0.5);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9998;
-        transform: translate(-50%, -50%);
-        transition:
-          width 0.3s ease,
-          height 0.3s ease;
       }
 
       /* ══ HERO ══ */
@@ -172,25 +157,21 @@
         transform: translateX(-50%);
         z-index: 2;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        gap: 0.4rem;
+        justify-content: center;
         opacity: 0;
         animation: fadeUp 1s ease 2s forwards;
       }
 
-      .hero-scroll-hint span {
-        font-size: 0.5rem;
-        letter-spacing: 0.4em;
-        text-transform: uppercase;
-        color: var(--gold);
-      }
-
-      .scroll-line {
-        width: 1px;
-        height: 32px;
-        background: linear-gradient(to bottom, var(--gold), transparent);
-        animation: scrollPulse 2s ease-in-out infinite;
+      .scroll-arrow {
+        width: 18px;
+        height: 18px;
+        stroke: var(--gold);
+        fill: none;
+        stroke-width: 1.3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        animation: arrowBounce 2s ease-in-out infinite;
       }
 
       /* ══ SHARED SECTION ══ */
@@ -285,6 +266,27 @@
           grid-template-columns: repeat(2, 1fr);
           max-width: 300px;
         }
+
+        .timeline::before {
+          left: 22px;
+        }
+        .timeline-item {
+          padding-left: 46px;
+          gap: 1rem;
+          margin-bottom: 1.75rem;
+        }
+        .timeline-node {
+          left: 22px;
+          width: 32px;
+          height: 32px;
+        }
+        .timeline-node svg {
+          width: 14px;
+          height: 14px;
+        }
+        .timeline-time {
+          font-size: 1.5rem;
+        }
       }
 
       .countdown-box {
@@ -332,6 +334,200 @@
         color: var(--gold);
         margin-top: 0.5rem;
         display: block;
+      }
+
+      /* ══ ITINERARY (Raspored dana) ══ */
+      #itinerary {
+        background: var(--dark);
+        position: relative;
+        overflow: hidden;
+      }
+
+      #itinerary::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 50% 100%,
+          rgba(201, 169, 110, 0.05) 0%,
+          transparent 60%
+        );
+        pointer-events: none;
+      }
+
+      .timeline {
+        position: relative;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+
+      /* Vertikalna zlatna linija kroz sredinu */
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 6px;
+        bottom: 6px;
+        left: 28px;
+        width: 1px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--gold-dim) 5%,
+          var(--gold-dim) 95%,
+          transparent
+        );
+      }
+
+      @media (min-width: 600px) {
+        .timeline::before {
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+
+      .timeline-item {
+        position: relative;
+        display: flex;
+        gap: clamp(1.25rem, 4vw, 2rem);
+        padding-left: 56px;
+        margin-bottom: clamp(2rem, 5vw, 3rem);
+      }
+
+      .timeline-item:last-child {
+        margin-bottom: 0;
+      }
+
+      /* Desktop: cik-cak levo/desno raspored */
+      @media (min-width: 600px) {
+        .timeline-item {
+          padding-left: 0;
+          width: 50%;
+        }
+        .timeline-item:nth-child(odd) {
+          margin-left: 0;
+          padding-right: clamp(2rem, 5vw, 3.5rem);
+          text-align: right;
+          flex-direction: row-reverse;
+        }
+        .timeline-item:nth-child(even) {
+          margin-left: 50%;
+          padding-left: clamp(2rem, 5vw, 3.5rem);
+        }
+      }
+
+      /* Ikonica čvor na liniji */
+      .timeline-node {
+        position: absolute;
+        left: 28px;
+        top: 0;
+        transform: translateX(-50%);
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--dark-2);
+        border: 1px solid var(--gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        z-index: 2;
+      }
+
+      @media (min-width: 600px) {
+        .timeline-node {
+          left: 50%;
+        }
+      }
+
+      .timeline-node svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--gold);
+        fill: none;
+        stroke-width: 1.4;
+      }
+
+      .timeline-card {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(16px);
+        padding: clamp(1.1rem, 3vw, 1.6rem) clamp(1.25rem, 4vw, 1.75rem);
+        flex: 1;
+        position: relative;
+      }
+
+      .timeline-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--gold),
+          transparent
+        );
+      }
+
+      .timeline-time {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 300;
+        font-style: italic;
+        font-size: clamp(1.6rem, 4vw, 2.1rem);
+        color: var(--gold-light);
+        line-height: 1;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .timeline-title {
+        font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+        letter-spacing: 0.03em;
+        color: var(--white);
+        line-height: 1.4;
+        margin-bottom: 0.3rem;
+      }
+
+      .timeline-place {
+        font-size: clamp(0.7rem, 2vw, 0.78rem);
+        color: var(--gold);
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border-bottom: 1px solid transparent;
+        transition:
+          border-color 0.3s ease,
+          opacity 0.3s ease;
+      }
+
+      .timeline-place:hover {
+        border-color: var(--gold);
+        opacity: 0.85;
+      }
+
+      @media (min-width: 600px) {
+        .timeline-item:nth-child(odd) .timeline-place {
+          flex-direction: row-reverse;
+        }
+      }
+
+      .timeline-place svg {
+        width: 12px;
+        height: 12px;
+        stroke: var(--gold);
+        fill: none;
+        stroke-width: 1.6;
+        flex-shrink: 0;
+      }
+
+      .timeline-place-static {
+        font-size: clamp(0.7rem, 2vw, 0.78rem);
+        color: rgba(245, 240, 234, 0.45);
+        letter-spacing: 0.04em;
       }
 
       /* ══ SLIDESHOW ══
@@ -461,15 +657,17 @@
         height: 5px;
       }
 
-      /* ══ LOVE NOTE ══ */
-      #love-note {
+      /* ══ OUTRO (potpis) ══ */
+      #outro {
         background: var(--dark-2);
         text-align: center;
         position: relative;
         overflow: hidden;
+        padding-top: clamp(2.5rem, 6vw, 4rem);
+        padding-bottom: clamp(2.5rem, 6vw, 4rem);
       }
 
-      #love-note::before {
+      #outro::before {
         content: "";
         position: absolute;
         inset: 0;
@@ -480,29 +678,17 @@
         );
       }
 
-      .love-quote {
+      .outro-text {
         font-family: "Cormorant Garamond", serif;
         font-style: italic;
         font-weight: 300;
-        font-size: clamp(1.3rem, 4.5vw, 2.6rem);
+        font-size: clamp(1.2rem, 3.5vw, 1.7rem);
         line-height: 1.6;
         color: var(--white);
-        max-width: 640px;
-        margin: 0 auto 2rem;
+        max-width: 520px;
+        margin: 0 auto 1.75rem;
         position: relative;
         padding: 0 0.5rem;
-      }
-
-      .love-quote::before {
-        content: "\201C";
-        font-size: clamp(4rem, 12vw, 8rem);
-        color: var(--gold);
-        opacity: 0.12;
-        position: absolute;
-        top: -1rem;
-        left: -0.25rem;
-        font-style: normal;
-        line-height: 1;
       }
 
       .love-sig {
@@ -534,12 +720,14 @@
           transform: translateY(0);
         }
       }
-      @keyframes scrollPulse {
+      @keyframes arrowBounce {
         0%,
         100% {
-          opacity: 0.4;
+          transform: translateY(0);
+          opacity: 0.5;
         }
         50% {
+          transform: translateY(6px);
           opacity: 1;
         }
       }
@@ -569,7 +757,6 @@
   </head>
   <body>
     <div class="cursor" id="cursor"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
 
     <!-- HERO -->
     <section id="hero">
@@ -587,8 +774,9 @@
         <p class="hero-date">Smederevska Palanka · Srbija</p>
       </div>
       <div class="hero-scroll-hint">
-        <span>Scroll</span>
-        <div class="scroll-line"></div>
+        <svg class="scroll-arrow" viewBox="0 0 24 24">
+          <path d="M12 4v15M5 12l7 7 7-7" />
+        </svg>
       </div>
     </section>
 
@@ -621,6 +809,174 @@
       </div>
     </section>
 
+    <!-- RASPORED DANA -->
+    <section id="itinerary">
+      <p class="section-label reveal">Pozivnica</p>
+      <h2 class="section-title reveal">Raspored <em>dana</em></h2>
+      <div class="divider reveal">
+        <div class="divider-line"></div>
+        <div class="divider-diamond"></div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="timeline">
+        <!-- 1. Skup svatova — Ilić -->
+        <div class="timeline-item reveal">
+          <div class="timeline-node">
+            <svg
+              viewBox="0 0 24 24"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12 21c-4-3.5-7-7-7-10.5A7 7 0 0 1 12 3a7 7 0 0 1 7 7.5C19 14 16 17.5 12 21z"
+              />
+              <circle cx="12" cy="10" r="2.3" />
+            </svg>
+          </div>
+          <div class="timeline-card">
+            <span class="timeline-time">09:00</span>
+            <p class="timeline-title">Skup svatova<br />porodica Ilić</p>
+            <span class="timeline-place-static">Smederevska Palanka</span>
+          </div>
+        </div>
+
+        <!-- 2. Skup svatova — Maksimović -->
+        <div class="timeline-item reveal">
+          <div class="timeline-node">
+            <svg
+              viewBox="0 0 24 24"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12 21c-4-3.5-7-7-7-10.5A7 7 0 0 1 12 3a7 7 0 0 1 7 7.5C19 14 16 17.5 12 21z"
+              />
+              <circle cx="12" cy="10" r="2.3" />
+            </svg>
+          </div>
+          <div class="timeline-card">
+            <span class="timeline-time">10:00</span>
+            <p class="timeline-title">Skup svatova<br />porodica Maksimović</p>
+            <span class="timeline-place-static">Smederevska Palanka</span>
+          </div>
+        </div>
+
+        <!-- 3. Crkveno venčanje -->
+        <div class="timeline-item reveal">
+          <div class="timeline-node">
+            <svg
+              viewBox="0 0 24 24"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 2v6M9.5 4.5h5" />
+              <path d="M6 21V11l6-5 6 5v10" />
+              <path d="M10 21v-6h4v6" />
+            </svg>
+          </div>
+          <div class="timeline-card">
+            <span class="timeline-time">11:00</span>
+            <p class="timeline-title">Crkveno venčanje</p>
+            <a
+              class="timeline-place"
+              href="https://www.google.com/maps/search/?api=1&query=Crkva+Sveta+Petka+Smederevska+Palanka"
+              target="_blank"
+              rel="noopener"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M12 21c-4-3.5-7-7-7-10.5A7 7 0 0 1 12 3a7 7 0 0 1 7 7.5C19 14 16 17.5 12 21z"
+                />
+                <circle cx="12" cy="10" r="2.3" />
+              </svg>
+              Crkva Sveta Petka
+            </a>
+          </div>
+        </div>
+
+        <!-- 4. Proslava -->
+        <div class="timeline-item reveal">
+          <div class="timeline-node">
+            <svg
+              viewBox="0 0 24 24"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M8 21h8M12 17v4" />
+              <path d="M7 4h10l-1 7a4 4 0 0 1-8 0L7 4z" />
+              <path
+                d="M7 6H4.5A1.5 1.5 0 0 0 3 7.5c0 1.8 1.5 3 4 3.3M17 6h2.5A1.5 1.5 0 0 1 21 7.5c0 1.8-1.5 3-4 3.3"
+              />
+            </svg>
+          </div>
+          <div class="timeline-card">
+            <span class="timeline-time">12:00</span>
+            <p class="timeline-title">Proslava</p>
+            <a
+              class="timeline-place"
+              href="https://www.google.com/maps/search/?api=1&query=Sala+Prestige+Smederevska+Palanka"
+              target="_blank"
+              rel="noopener"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M12 21c-4-3.5-7-7-7-10.5A7 7 0 0 1 12 3a7 7 0 0 1 7 7.5C19 14 16 17.5 12 21z"
+                />
+                <circle cx="12" cy="10" r="2.3" />
+              </svg>
+              Sala Prestige
+            </a>
+          </div>
+        </div>
+
+        <!-- 5. Opštinsko venčanje -->
+        <div class="timeline-item reveal">
+          <div class="timeline-node">
+            <svg
+              viewBox="0 0 24 24"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 21h14" />
+              <path d="M6 21V10M10 21V10M14 21V10M18 21V10" />
+              <path d="M4 10l8-6 8 6" />
+            </svg>
+          </div>
+          <div class="timeline-card">
+            <span class="timeline-time">13:00</span>
+            <p class="timeline-title">Opštinsko venčanje</p>
+            <a
+              class="timeline-place"
+              href="https://www.google.com/maps/search/?api=1&query=Sala+Prestige+Smederevska+Palanka"
+              target="_blank"
+              rel="noopener"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M12 21c-4-3.5-7-7-7-10.5A7 7 0 0 1 12 3a7 7 0 0 1 7 7.5C19 14 16 17.5 12 21z"
+                />
+                <circle cx="12" cy="10" r="2.3" />
+              </svg>
+              Sala Prestige
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- SLIDESHOW -->
     <section id="gallery">
       <p class="section-label reveal">Naše uspomene</p>
@@ -644,14 +1000,13 @@
       </div>
     </section>
 
-    <!-- LOVE NOTE -->
-    <section id="love-note">
+    <!-- OUTRO -->
+    <section id="outro">
       <div class="reveal">
-        <p class="love-quote">
-          Pronašli smo jedno u drugom sve što smo ikad tražili.<br />
-          I sada, pred svima koje volimo — izgovaramo <em>da</em>.
+        <p class="outro-text">
+          Vaše prisustvo je najlepši poklon koji nam možete pokloniti.
         </p>
-        <div class="divider" style="margin-bottom: 2rem">
+        <div class="divider" style="margin-bottom: 1.5rem">
           <div class="divider-line"></div>
           <div class="divider-diamond"></div>
           <div class="divider-line"></div>
@@ -667,31 +1022,9 @@
     <script>
       /* ── CURSOR ── */
       const cursor = document.getElementById("cursor");
-      const ring = document.getElementById("cursorRing");
-      let mx = 0,
-        my = 0,
-        rx = 0,
-        ry = 0;
       document.addEventListener("mousemove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-        cursor.style.left = mx + "px";
-        cursor.style.top = my + "px";
-      });
-      (function loop() {
-        rx += (mx - rx) * 0.12;
-        ry += (my - ry) * 0.12;
-        ring.style.left = rx + "px";
-        ring.style.top = ry + "px";
-        requestAnimationFrame(loop);
-      })();
-      document.querySelectorAll("button,a,.slide").forEach((el) => {
-        el.addEventListener("mouseenter", () => {
-          ring.style.width = ring.style.height = "48px";
-        });
-        el.addEventListener("mouseleave", () => {
-          ring.style.width = ring.style.height = "32px";
-        });
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
       });
 
       /* ── VIDEO ── */
